@@ -121,7 +121,6 @@ impl TryFrom<Matches> for Configuration {
 const ADDRESS_HEX_LENGTH: usize = 40;
 const ADDRESS_BYTES_LENGTH: usize = ADDRESS_HEX_LENGTH / 2;
 const KECCAK256_HASH_BYTES_LENGTH: usize = 32;
-const KECCAK256_HASH_HEX_LENGTH: usize = KECCAK256_HASH_BYTES_LENGTH * 2;
 
 const PUBLIC_KEY_BYTES_START_INDEX: usize = 1;
 const ADDRESS_BYTES_START_INDEX: usize = KECCAK256_HASH_BYTES_LENGTH - ADDRESS_BYTES_LENGTH;
@@ -170,23 +169,23 @@ fn to_checksum_address<'a>(addr: &str, checksum_addr_hex_buf: &'a mut [u8]) -> &
 
     let mut hash = [0u8; KECCAK256_HASH_BYTES_LENGTH];
     let mut hasher = Keccak::v256();
-    hasher.update(&addr_bytes);
+    hasher.update(addr_bytes);
     hasher.finalize(&mut hash);
 
-    let mut buf = [0u8; KECCAK256_HASH_HEX_LENGTH];
-    let addr_hash = to_hex(&hash, &mut buf);
-    let addr_hash_bytes = addr_hash.as_bytes();
-
-    for i in 0..addr_bytes.len() {
-        let byte = addr_bytes[i];
-        checksum_addr_hex_buf[i] = if addr_hash_bytes[i] >= 56 {
-            byte.to_ascii_uppercase()
+    for (i, &ch) in addr_bytes.iter().enumerate() {
+        let nibble = if (i & 1) == 0 {
+            hash[i / 2] >> 4 // High part.
         } else {
-            byte // Already lowercase.
-        }
+            hash[i / 2] & 0x0f // Low part.
+        };
+        checksum_addr_hex_buf[i] = if nibble > 7 {
+            ch.to_ascii_uppercase()
+        } else {
+            ch
+        };
     }
 
-    std::str::from_utf8(&checksum_addr_hex_buf[0..addr.len()])
+    std::str::from_utf8(&checksum_addr_hex_buf[..addr_bytes.len()])
         .expect("to_checksum_address: failed to convert byte array to hex string")
 }
 
@@ -468,18 +467,18 @@ mod tests {
 
     #[test]
     fn it_should_checksum_address() {
-        let addr = "00000000219ab540356cbb839cbe05303d7705fa";
-        let mut checksum_addr_buf = [0u8; ADDRESS_HEX_LENGTH];
-        assert_eq!(
-            to_checksum_address(addr, &mut checksum_addr_buf),
-            "00000000219ab540356cBB839Cbe05303d7705Fa"
-        );
+        let checksum_addrs = [
+            "00000000219ab540356cBB839Cbe05303d7705Fa",
+            "d8dA6BF26964aF9D7eEd9e03E53415D37aA96045",
+            "C02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+            "A0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        ];
 
-        let mut checksum_addr_buf = [0u8; ADDRESS_HEX_LENGTH * 2];
-        assert_eq!(
-            to_checksum_address(addr, &mut checksum_addr_buf),
-            "00000000219ab540356cBB839Cbe05303d7705Fa"
-        );
+        for &checksum_addr in &checksum_addrs {
+            let addr_lower = checksum_addr.to_lowercase();
+            let mut buf = [0u8; ADDRESS_HEX_LENGTH];
+            assert_eq!(to_checksum_address(&addr_lower, &mut buf), checksum_addr);
+        }
     }
 
     #[test]
