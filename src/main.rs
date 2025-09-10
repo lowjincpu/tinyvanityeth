@@ -4,8 +4,8 @@ use rust_decimal::{Decimal, MathematicalOps};
 use secp256k1::generate_keypair;
 use secp256k1::rand::rng;
 use std::process::exit;
-use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::time::{Duration, Instant};
 use std::{env, thread};
 use tiny_keccak::{Hasher, Keccak};
@@ -162,7 +162,7 @@ fn to_checksum_address<'a>(addr: &str, checksum_addr_hex_buf: &'a mut [u8]) -> &
         panic!("to_checksum_address: invalid address");
     }
 
-    if checksum_addr_hex_buf.len() < ADDRESS_BYTES_LENGTH {
+    if checksum_addr_hex_buf.len() < ADDRESS_HEX_LENGTH {
         panic!("to_checksum_address: buffer overflow");
     }
 
@@ -424,8 +424,7 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use crate::{
-        calc_difficulty, calc_probability, is_addr_matching, is_lower_hex, to_checksum_address,
-        to_hex, AddressPart, Rules, ADDRESS_HEX_LENGTH,
+        calc_difficulty, calc_probability, is_addr_matching, is_lower_hex, to_checksum_address, to_hex, AddressPart, Rules, ADDRESS_HEX_LENGTH
     };
     use regex::RegexBuilder;
     use rust_decimal::Decimal;
@@ -495,7 +494,7 @@ mod tests {
     #[should_panic(expected = "to_checksum_address: buffer overflow")]
     fn it_should_fail_to_checksum_on_buffer_overflow() {
         let addr = "00000000219ab540356cbb839cbe05303d7705fa";
-        let mut checksum_addr_buf = [0u8; 2];
+        let mut checksum_addr_buf = [0u8; ADDRESS_HEX_LENGTH - 1];
         to_checksum_address(addr, &mut checksum_addr_buf);
     }
 

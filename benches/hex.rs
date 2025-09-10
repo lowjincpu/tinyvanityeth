@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, black_box, criterion_group, criterion_main};
 use std::fmt::Write;
 
 const KECCAK256_HASH_BYTES_LENGTH: usize = 32;
