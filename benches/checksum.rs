@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, black_box, criterion_group, criterion_main};
 use tiny_keccak::{Hasher, Keccak};
 
 const ADDRESS_HEX_LENGTH: usize = 40;

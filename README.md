@@ -84,19 +84,19 @@ like [secp256k1](https://github.com/rust-bitcoin/rust-secp256k1/) and
 
 Case-insensitive search for an address with the prefix `5eaf00d`. 🍣
 
-**Apple M1 Max** (`stable-aarch64-apple-darwin - rustc 1.61.0`)
+**Apple M1 Max** (`stable-aarch64-apple-darwin - rustc 1.89.0`)
 
 | Platform                                |             Speed |
 |:----------------------------------------|------------------:|
-| tinyvanityeth                           | ~488,247 addr/sec |
+| tinyvanityeth                           | ~580,748 addr/sec |
 | [vanity-eth.tk](https://vanity-eth.tk/) |  ~19,047 addr/sec |
 
-**Intel Xeon E5-1620v2** (`stable-x86_64-pc-windows-msvc - rustc 1.61.0`)
+**Intel Core i9-13900KS** (`stable-x86_64-pc-windows-msvc - rustc 1.89.0`)
 
 | Platform                                |            Speed |
 |:----------------------------------------|-----------------:|
-| tinyvanityeth                           | ~77,084 addr/sec |
-| [vanity-eth.tk](https://vanity-eth.tk/) |  ~4,889 addr/sec |
+| tinyvanityeth                           | ~934,903 addr/sec |
+| [vanity-eth.tk](https://vanity-eth.tk/) |  ~51,762 addr/sec |
 
 ## 🧑‍💻 Development
 
