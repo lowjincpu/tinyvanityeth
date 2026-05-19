@@ -1,8 +1,9 @@
 use getopts::{Matches, Options};
 use regex::{Regex, RegexBuilder};
 use rust_decimal::{Decimal, MathematicalOps};
-use secp256k1::generate_keypair;
-use secp256k1::Secp256k1;
+//use secp256k1::generate_keypair;
+use secp256k1::{Secp256k1, generate_keypair} ;
+use secp256k1::rand::rng;
 use rand::thread_rng;
 use std::process::exit;
 use std::sync::Arc;
@@ -314,9 +315,10 @@ fn main() {
             let mut checksum_addr_hex_buf = [0u8; ADDRESS_HEX_LENGTH];
 
             let mut rng = rng();
+            let secp = Secp256k1::new();
             while !found.load(Ordering::Acquire) {
-                let secp = Secp256k1::new();
                 let (sk, pk) = secp.generate_keypair(&mut thread_rng());
+                
                 // The uncompressed public key is prefixed with a constant 0x04 byte meaning it has
                 // both X and Y coordinates. Let's get rid of it!
                 let pk_bytes = &pk.serialize_uncompressed()[PUBLIC_KEY_BYTES_START_INDEX..];
