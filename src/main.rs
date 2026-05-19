@@ -2,7 +2,7 @@ use getopts::{Matches, Options};
 use regex::{Regex, RegexBuilder};
 use rust_decimal::{Decimal, MathematicalOps};
 use secp256k1::generate_keypair;
-//use secp256k1::Secp256k1;
+use secp256k1::Secp256k1;
 use secp256k1::rand::rng;
 //use rand::thread_rng;
 use std::process::exit;
