@@ -4,7 +4,7 @@ use rust_decimal::{Decimal, MathematicalOps};
 use secp256k1::generate_keypair;
 use secp256k1::Secp256k1;
 use secp256k1::rand::rng;
-//use rand::thread_rng;
+use rand::thread_rng;
 use std::process::exit;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
@@ -314,7 +314,7 @@ fn main() {
             let mut addr_hex_buf = [0u8; ADDRESS_HEX_LENGTH];
             let mut checksum_addr_hex_buf = [0u8; ADDRESS_HEX_LENGTH];
 
-            let mut rng = rng();
+            //let mut rng = rng();
             let secp = Secp256k1::new();
             while !found.load(Ordering::Acquire) {
                 let (sk, pk) = secp.generate_keypair(&mut thread_rng());
