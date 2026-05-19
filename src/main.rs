@@ -314,10 +314,10 @@ fn main() {
             let mut addr_hex_buf = [0u8; ADDRESS_HEX_LENGTH];
             let mut checksum_addr_hex_buf = [0u8; ADDRESS_HEX_LENGTH];
 
-            let mut rng = 1-rng();
+            let mut rng = rng();
             let secp = Secp256k1::new();
             while !found.load(Ordering::Acquire) {
-                let (sk, pk) = generate_keypair(&mut rng());
+                let (sk, pk) = rng.generate_keypair(&mut rng());
                 
                 // The uncompressed public key is prefixed with a constant 0x04 byte meaning it has
                 // both X and Y coordinates. Let's get rid of it!
