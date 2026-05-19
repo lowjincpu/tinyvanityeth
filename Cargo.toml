@@ -14,8 +14,7 @@ edition = "2024"
 getopts = "0.2"
 num_cpus = "1"
 regex = "1"
-secp256k1 = { version = "0.31.1", features = ["rand", "rand-std", "global-context"] }
-rand = "0.8"
+secp256k1 = { version = "0.31.1", features = ["rand", "global-context"] }
 tiny-keccak = { version = "2", features = ["keccak"] }
 rust_decimal = { version = "1", features = ["maths"] }
 
