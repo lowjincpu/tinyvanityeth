@@ -316,7 +316,7 @@ fn main() {
             let mut rng = rng();
             while !found.load(Ordering::Acquire) {
                 let secp = Secp256k1::new();
-                let (sk, pk) = secp.random_keypair(&mut thread_rng());
+                let (sk, pk) = secp.generate_keypair(&mut thread_rng());
                 // The uncompressed public key is prefixed with a constant 0x04 byte meaning it has
                 // both X and Y coordinates. Let's get rid of it!
                 let pk_bytes = &pk.serialize_uncompressed()[PUBLIC_KEY_BYTES_START_INDEX..];
